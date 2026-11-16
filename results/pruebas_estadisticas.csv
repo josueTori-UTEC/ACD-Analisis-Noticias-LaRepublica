@@ -1,0 +1,9 @@
+﻿prueba,variables,estadistico,gl,p_valor,tamano_efecto,medida_efecto,celdas_esperado_menor_5_%
+Chi-cuadrado de independencia,seccion_agrupada x anio,1505.6,44,5.9e-287,0.613,V de Cramér,40.0
+Chi-cuadrado de independencia,area_editorial x hay_desfase,32.9,5,3.9e-06,0.172,V de Cramér,0.0
+Kruskal-Wallis,longitud_titulo ~ seccion (12 secciones),182.3,11,3.4e-33,0.182,epsilon cuadrado,
+Chi-cuadrado de independencia,area_editorial x contiene_cifra,49.4,5,1.8e-09,0.21,V de Cramér,0.0
+Chi-cuadrado de independencia,area_editorial x contiene_pregunta,37.8,5,4.1e-07,0.184,V de Cramér,17.0
+Chi-cuadrado de independencia,area_editorial x contiene_comillas,139.7,5,2.1e-28,0.354,V de Cramér,0.0
+Chi-cuadrado de independencia,area_editorial x franja_horaria,151.0,15,1.5e-24,0.212,V de Cramér,8.0
+Chi-cuadrado de independencia,anio x url_hnews,98.7,4,1.9e-20,0.297,V de Cramér,20.0
