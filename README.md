@@ -9,11 +9,13 @@ Caracterizar la colección de noticias de La República por secciones, etiquetas
 
 ## Equipo
 
-- Aguirre Milla, Fernando
-- Toribio Arrieta, Josue Raul
-- Hurtado Vite, Mia Dayhana
-- Pacheco Vera, Fatima Isabella
-- Romano Castro, Aaron Adriano
+| Integrante | Responsabilidad en la Parte II |
+|---|---|
+| Aguirre Milla, Fernando | Coordinación general, ingesta y descripción del origen de los datos (Parte I) |
+| Toribio Arrieta, Josue Raul | Integración de metadatos y construcción de la base analítica (notebook 01) |
+| Hurtado Vite, Mia Dayhana | Validaciones de calidad y pruebas estadísticas |
+| Pacheco Vera, Fatima Isabella | Diccionario de datos, README y reproducibilidad del repositorio |
+| Romano Castro, Aaron Adriano | Análisis visual, interpretación, redacción del informe y presentación |
 
 ## Archivos
 
