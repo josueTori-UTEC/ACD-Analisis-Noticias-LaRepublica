@@ -1,11 +1,51 @@
-# Análisis de patrones de cobertura periodística en La República
+# Análisis de la cobertura periodística de La República
 
-**Curso:** DS3021 Análisis Computacional de Datos  
-**Equipo:** Grupo 3 — UTEC, 2026
+Proyecto final de **DS3021 Análisis Computacional de Datos** (UTEC, 2026-1) · Grupo 3 · Parte II
 
-## Propósito
+Se parte de 1 116 noticias de larepublica.pe recopiladas por scraping en la Parte I. El repositorio contiene el proceso que las limpia, integra y transforma, y el análisis que mide los sesgos de la colección: concentración temporal, confiabilidad de la fecha y la hora, y diferencias de estilo entre áreas editoriales.
 
-Caracterizar la colección de noticias de La República por secciones, etiquetas, autores, horarios registrados y características de los titulares. Los resultados describen una muestra de 1 116 registros y no representan un censo de todas las publicaciones del medio.
+**Resultados principales**
+- El 43,4 % de las noticias es de agosto y septiembre de 2026; la composición por sección cambia mucho con el año (V de Cramér = 0,61).
+- `fecha` nunca es anterior a la fecha de la URL, difiere en el 38,4 % de los casos y llega a 1 632 días: puede ser fecha de actualización.
+- El estilo del titular (comillas, cifras, preguntas) y el horario dependen del área editorial.
+
+## Estructura
+
+```
+├── data/           CSV original, CSV final y base SQLite
+├── notebooks/      01_preprocesamiento.ipynb · 02_analisis_visualizacion.ipynb
+├── docs/           Diccionarios de datos (inicial y final)
+├── results/        Indicadores, resúmenes y pruebas estadísticas
+├── figures/        14 gráficos generados por los notebooks
+├── reports/        Informe final (PDF y fuente LaTeX)
+├── presentacion/   Presentación (PPTX y PDF) y guion de exposición
+├── run_all.py      Ejecuta todo el pipeline
+└── requirements.txt
+```
+
+## Cómo reproducir
+
+Requiere Python 3.10 o superior y no necesita conexión a internet.
+
+```bash
+git clone https://github.com/josueTori-UTEC/ACD-Analisis-Noticias-LaRepublica.git
+cd ACD-Analisis-Noticias-LaRepublica
+pip install -r requirements.txt
+python run_all.py
+```
+
+`run_all.py` ejecuta los dos notebooks en orden. También se pueden abrir en Jupyter y correr celda por celda (primero el 01 y luego el 02).
+
+| Paso | Entrada | Salida |
+|---|---|---|
+| `01_preprocesamiento.ipynb` | `data/noticias_larepublica_original.csv` | `data/noticias_larepublica_final.csv`, `data/noticias_larepublica.db`, `results/indicadores.json`, `results/resumen_*.csv`, `figures/14_pipeline.png` |
+| `02_analisis_visualizacion.ipynb` | `data/noticias_larepublica_final.csv` | `figures/01…13_*.png`, `results/pruebas_estadisticas.csv` |
+
+## Datos
+
+- **Original:** 1 116 filas y 7 columnas (`tag`, `titulo`, `longitud_titulo`, `url`, `autor`, `hora`, `fecha`).
+- **Final:** 1 116 filas y 31 columnas (24 derivadas). Diccionario en `docs/Diccionario_de_datos_final.pdf`.
+- **Limitaciones:** muestra no aleatoria y concentrada en ago-sep 2026; `fecha` puede no ser la de publicación; sin texto completo ni métricas de lectura.
 
 ## Equipo
 
@@ -16,72 +56,3 @@ Caracterizar la colección de noticias de La República por secciones, etiquetas
 | Hurtado Vite, Mia Dayhana | Validaciones de calidad y pruebas estadísticas |
 | Pacheco Vera, Fatima Isabella | Diccionario de datos, README y reproducibilidad del repositorio |
 | Romano Castro, Aaron Adriano | Análisis visual, interpretación, redacción del informe y presentación |
-
-## Archivos
-
-```text
-ACD-Grupo3/
-├── README.md
-├── requirements.txt
-├── .gitignore
-├── data/
-│   ├── noticias_larepublica_original.csv
-│   └── noticias_larepublica_final.csv
-├── notebooks/
-│   ├── 01_preprocesamiento.ipynb
-│   └── 02_analisis_visualizacion.ipynb
-├── docs/
-│   ├── Diccionario_de_datos_original.pdf
-│   ├── Diccionario_de_datos_final.pdf
-│   └── Diccionario_de_datos_final.docx
-├── results/
-│   ├── indicadores.json
-│   ├── resumen_secciones.csv
-│   └── resumen_autores.csv
-├── figures/
-│   └── 01_secciones.png ... 08_dias_semana.png
-├── reports/
-│   ├── Informe_final_ACD_Grupo3.pdf
-│   └── Informe_final_ACD_Grupo3.docx
-└── presentacion/
-    ├── Presentacion_ACD_Grupo3.pptx
-    ├── Presentacion_ACD_Grupo3.pdf
-    └── Guion_de_exposicion.md
-```
-
-## Reproducción del análisis
-
-Se requiere Python 3.10 o posterior. Desde la raíz del repositorio:
-
-```bash
-pip install -r requirements.txt
-jupyter notebook
-```
-
-En Jupyter, abrir `notebooks/01_preprocesamiento.ipynb` y seleccionar **Run All**. Esta ejecución lee el archivo original de `data/`, construye las variables, exporta el CSV final y guarda los indicadores en `results/`. Luego abrir `notebooks/02_analisis_visualizacion.ipynb` y seleccionar **Run All** para obtener las tablas y regenerar los ocho gráficos en `figures/`.
-
-**Todo el código se encuentra dentro de los dos notebooks `.ipynb`**. No se necesitan scripts Python externos ni acceso a internet para reproducir los resultados usando el CSV incluido. Los notebooks contienen las celdas ejecutadas y sus salidas.
-
-Los archivos también se pueden abrir desde la raíz mediante Jupyter, porque cada notebook identifica el directorio `data/` antes de procesar.
-
-## Preparación de datos
-
-1. Comprobación de las siete columnas originales y normalización de los campos textuales.
-2. Detección de URL duplicadas y verificación de identificadores y títulos no vacíos.
-3. Conservación explícita de las diez etiquetas ausentes mediante la categoría `Sin etiqueta`.
-4. Cálculo de la longitud del titular a partir del texto normalizado.
-5. Asociación de la sección con el primer segmento de la URL y contraste de fechas sin sustituirlas.
-6. Construcción de atributos temporales, indicadores del titular y agrupaciones descriptivas.
-7. Exportación del CSV de 18 columnas, indicadores, tablas y ocho gráficos.
-
-Se conservaron las observaciones con longitudes atípicas del titular; la regla IQR se usó como detector, no como criterio automático de exclusión. Las fechas incorporadas en las rutas de URL no se consideran equivalentes a la fecha de publicación.
-
-## Resultados y limitaciones
-
-El CSV de origen tiene 1 116 filas y 7 columnas. El CSV final mantiene las 1 116 filas y contiene 18 variables. Las URL son únicas y las variables finales no presentan datos faltantes. La validación está integrada en el notebook de preprocesamiento. Los resultados completos están en `results/indicadores.json`.
-
-La selección de noticias no es probabilística y no cubre todos los días del periodo. `tag` y `seccion` son niveles diferentes de clasificación. No se dispone del texto completo de las noticias, métricas de audiencia ni historial de actualización de los artículos. La colección no permite inferir por sí sola tendencias temporales generales de la redacción.
-
-## Fuente
-
-Datos recopilados de páginas públicas de [La República](https://larepublica.pe/). Las URL originales están disponibles en `data/noticias_larepublica_original.csv`.
